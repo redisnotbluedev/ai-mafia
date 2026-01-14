@@ -1,0 +1,234 @@
+[gd_scene load_steps=20 format=3 uid="uid://dr2nn863xk2ya"]
+
+[ext_resource type="Script" uid="uid://bsxdo1okycf3n" path="res://main.gd" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://6ec0v4wwijip" path="res://classes/OpenAI.gd" id="1_ig7tw"]
+[ext_resource type="Environment" uid="uid://cqjhlwd55we0k" path="res://assets/resources/day_environment.tres" id="2_4c57u"]
+[ext_resource type="Script" uid="uid://blr3acdybe7vh" path="res://classes/MafiaGame.gd" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://y52nsk4e6gk" path="res://classes/MafiaDebugger.gd" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://cwlbaitapry43" path="res://components/player/player.tscn" id="5_lquwl"]
+[ext_resource type="PackedScene" uid="uid://cn378byjsoyi6" path="res://assets/models/house1.glb" id="6_kek77"]
+[ext_resource type="PackedScene" uid="uid://dkhlx4yy04bg0" path="res://assets/models/house2.glb" id="7_4c57u"]
+[ext_resource type="PackedScene" uid="uid://cvcylbxs1nsun" path="res://assets/models/house3.glb" id="8_efxa6"]
+[ext_resource type="PackedScene" uid="uid://dcrb4iwqkypln" path="res://assets/models/tree.glb" id="9_dg77c"]
+[ext_resource type="PackedScene" uid="uid://neafgulfd57d" path="res://assets/models/doctor_office.glb" id="9_ycdy4"]
+[ext_resource type="PackedScene" uid="uid://c0wievkudhh0q" path="res://components/lamp/lamp.tscn" id="10_efxa6"]
+[ext_resource type="PackedScene" uid="uid://1jigdrn2muho" path="res://assets/models/sheriff_office.glb" id="11_ycdy4"]
+[ext_resource type="PackedScene" uid="uid://dt6v1pr14lklj" path="res://assets/models/mafia_hideout.glb" id="12_w48qg"]
+[ext_resource type="PackedScene" uid="uid://bmjywqv13qxpk" path="res://components/ui/ui.tscn" id="15_vivmo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ycdy4"]
+albedo_color = Color(0.41960785, 0.4392157, 0.47058824, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_w48qg"]
+material = SubResource("StandardMaterial3D_ycdy4")
+top_radius = 15.0
+bottom_radius = 15.0
+height = 5.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efxa6"]
+albedo_color = Color(0, 0.57214785, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dg77c"]
+material = SubResource("StandardMaterial3D_efxa6")
+top_radius = 4.0
+bottom_radius = 4.0
+height = 5.0
+
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("game", "ui", "openai", "town_square", "doctor_spawn", "sheriff_spawn", "mafia_spawn", "town_camera", "doctor_camera", "sheriff_camera", "mafia_camera")]
+script = ExtResource("1_0xm2m")
+game = NodePath("MafiaGame")
+ui = NodePath("CanvasLayer/UI")
+player_scene = ExtResource("5_lquwl")
+openai = NodePath("OpenAI")
+town_square = NodePath("Markers/TownSquare")
+doctor_spawn = NodePath("Town/Houses/house2/doctor_office/DoctorSpawn")
+sheriff_spawn = NodePath("Town/Houses/house4/sheriff_office/SheriffSpawn")
+mafia_spawn = NodePath("Town/Houses/house10/mafia_hideout/MafiaSpawn")
+town_camera = NodePath("MainCamera")
+doctor_camera = NodePath("Town/Houses/house2/doctor_office/DoctorCamera")
+sheriff_camera = NodePath("Town/Houses/house4/sheriff_office/SheriffCamera")
+mafia_camera = NodePath("Town/Houses/house10/mafia_hideout/MafiaCamera")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("2_4c57u")
+script = ExtResource("2_h2yge")
+
+[node name="MafiaGame" type="Node" parent="." node_paths=PackedStringArray("openai_client")]
+script = ExtResource("2_h2yge")
+openai_client = NodePath("../OpenAI")
+metadata/_custom_type_script = "uid://blr3acdybe7vh"
+
+[node name="MafiaDebugger" type="Node" parent="MafiaGame" node_paths=PackedStringArray("game")]
+script = ExtResource("3_1bvp3")
+game = NodePath("..")
+metadata/_custom_type_script = "uid://y52nsk4e6gk"
+
+[node name="OpenAI" type="Node" parent="."]
+script = ExtResource("1_ig7tw")
+api_key = "sk-mapleai-5nwEr5eE0BmhHN6vpjndBsw9juH5IhUyjlyRT7mdoLow0JlQDTjtbHTy5JdTKGcxTDn1HoSFW1PsMeR1"
+base_url = "https://api.mapleai.de/v1"
+metadata/_custom_type_script = "uid://6ec0v4wwijip"
+
+[node name="NightSun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.7071068, -0.5, 0.5, -3.0908623e-08, 0.7071068, 0.70710677, -0.7071068, 0.49999997, -0.50000006, 64, 64, -64)
+visible = false
+light_color = Color(0.019607844, 0.019607844, 0.3019608, 1)
+light_energy = 0.4
+shadow_enabled = true
+
+[node name="DaySun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.7071068, -0.5, 0.5, 0, 0.7071068, 0.7071068, -0.7071068, 0.5, -0.5, 64, 64, -64)
+light_color = Color(1, 0.9607843, 0.8901961, 1)
+shadow_enabled = true
+shadow_blur = 0.1
+
+[node name="Town" type="Node3D" parent="."]
+
+[node name="Ground" type="MeshInstance3D" parent="Town"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
+mesh = SubResource("CylinderMesh_w48qg")
+skeleton = NodePath("../..")
+
+[node name="Houses" type="Node3D" parent="Town"]
+
+[node name="house1" parent="Town/Houses" instance=ExtResource("6_kek77")]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -2.3, 1.5, 10.35)
+
+[node name="house2" parent="Town/Houses" instance=ExtResource("7_4c57u")]
+transform = Transform3D(-0.7071068, 0, 0.7071067, 0, 1, 0, -0.7071067, 0, -0.7071068, 4, 1.6, 10.35)
+
+[node name="doctor_office" parent="Town/Houses/house2" instance=ExtResource("9_ycdy4")]
+transform = Transform3D(-0.9999999, 0, 5.9604645e-08, 0, 1, 0, -5.9604645e-08, 0, -0.9999999, 0.495, -0.499, 0.071)
+
+[node name="OfficeLight" type="OmniLight3D" parent="Town/Houses/house2/doctor_office"]
+transform = Transform3D(1.0000002, 0, 0, 0, 1, 0, 0, 0, 1.0000002, -0.14141941, 0.29999995, 0.14141989)
+omni_range = 2.71
+
+[node name="DoctorCamera" type="Camera3D" parent="Town/Houses/house2/doctor_office"]
+transform = Transform3D(-1.1920929e-07, 0, -1.0000001, 0, 1, 0, 1.0000001, 0, -1.1920929e-07, -1.3434992, -0.19999999, 0.07070875)
+near = 0.5
+
+[node name="DoctorSpawn" type="Marker3D" parent="Town/Houses/house2/doctor_office"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40000057, -0.39999998, -0.3499999)
+
+[node name="house3" parent="Town/Houses" instance=ExtResource("8_efxa6")]
+transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, -10.1, 1, 3)
+
+[node name="house6" parent="Town/Houses" instance=ExtResource("8_efxa6")]
+transform = Transform3D(-1.0000001, 0, 0, 0, 1, 0, 0, 0, -1.0000001, 9.7, 1, 0.79999995)
+
+[node name="house4" parent="Town/Houses" instance=ExtResource("7_4c57u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 1.6, -1.6499996)
+
+[node name="sheriff_office" parent="Town/Houses/house4" instance=ExtResource("11_ycdy4")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.495, -0.499, 0.071)
+
+[node name="OfficeLight" type="OmniLight3D" parent="Town/Houses/house4/sheriff_office"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14141941, 0.29999995, 0.14141989)
+omni_range = 2.71
+
+[node name="SheriffCamera" type="Camera3D" parent="Town/Houses/house4/sheriff_office"]
+transform = Transform3D(-1.1920929e-07, 0, -1.0000001, 0, 1, 0, 1.0000001, 0, -1.1920929e-07, -1.3434992, -0.19999999, 0.07070875)
+near = 0.5
+
+[node name="SheriffSpawn" type="Marker3D" parent="Town/Houses/house4/sheriff_office"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.4, 0.05)
+
+[node name="house7" parent="Town/Houses" instance=ExtResource("7_4c57u")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 12.4, 1.6, -2.4499993)
+
+[node name="house10" parent="Town/Houses" instance=ExtResource("7_4c57u")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0.39999962, 1.6, -12.449999)
+
+[node name="mafia_hideout" parent="Town/Houses/house10" instance=ExtResource("12_w48qg")]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Town/Houses/house10/mafia_hideout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0.15)
+light_color = Color(1, 0, 0, 1)
+light_energy = 0.5
+
+[node name="MafiaCamera" type="Camera3D" parent="Town/Houses/house10/mafia_hideout"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0.20000005)
+fov = 80.0
+
+[node name="MafiaSpawn" type="Marker3D" parent="Town/Houses/house10/mafia_hideout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0.2)
+
+[node name="house5" parent="Town/Houses" instance=ExtResource("6_kek77")]
+transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49999997, -4, 1.5, -10.65)
+
+[node name="house8" parent="Town/Houses" instance=ExtResource("6_kek77")]
+transform = Transform3D(-0.9063078, 0, 0.4226182, 0, 1, 0, -0.4226182, 0, -0.9063078, 11, 1.5, 5.3500004)
+
+[node name="house9" parent="Town/Houses" instance=ExtResource("6_kek77")]
+transform = Transform3D(-0.6427876, 0, -0.76604444, 0, 1, 0, 0.76604444, 0, -0.6427876, 6, 1.5, -10.65)
+
+[node name="Park" type="Node3D" parent="Town"]
+
+[node name="tree" parent="Town/Park" instance=ExtResource("9_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 2.5, 7.5)
+
+[node name="tree2" parent="Town/Park" instance=ExtResource("9_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.2, 2.5, 7.6000004)
+
+[node name="tree3" parent="Town/Park" instance=ExtResource("9_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 2.5, 10.3)
+
+[node name="Grass" type="MeshInstance3D" parent="Town/Park"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.3, -2.4, 8)
+mesh = SubResource("CylinderMesh_dg77c")
+
+[node name="Trees" type="Node3D" parent="Town"]
+
+[node name="tree6" parent="Town/Trees" instance=ExtResource("9_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 2.5, 7)
+
+[node name="tree4" parent="Town/Trees" instance=ExtResource("9_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 2.5, -6)
+
+[node name="tree5" parent="Town/Trees" instance=ExtResource("9_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.3, 2.5, -9.3)
+
+[node name="tree7" parent="Town/Trees" instance=ExtResource("9_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.7, 2.5, -7.3)
+
+[node name="Lamps" type="Node3D" parent="Town"]
+
+[node name="lamp" parent="Town/Lamps" instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 0)
+
+[node name="lamp2" parent="Town/Lamps" instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="lamp3" parent="Town/Lamps" instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 0)
+
+[node name="lamp4" parent="Town/Lamps" instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="lamp5" parent="Town/Lamps" instance=ExtResource("10_efxa6")]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -5, 0, 4)
+
+[node name="lamp6" parent="Town/Lamps" instance=ExtResource("10_efxa6")]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -5, 0, -7)
+
+[node name="lamp7" parent="Town/Lamps" instance=ExtResource("10_efxa6")]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 7, 0, -7)
+
+[node name="lamp8" parent="Town/Lamps" instance=ExtResource("10_efxa6")]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 5, 0, 5)
+
+[node name="MainCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+current = true
+
+[node name="Markers" type="Node3D" parent="."]
+
+[node name="TownSquare" type="Marker3D" parent="Markers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725, 0)
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" parent="CanvasLayer" instance=ExtResource("15_vivmo")]

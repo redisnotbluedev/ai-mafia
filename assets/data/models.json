@@ -1,0 +1,38 @@
+[
+	{
+		"model": "gpt-5.1",
+		"name": "ChatGPT 4o",
+		"face": "res://assets/images/openai.svg",
+		"body_colour": "#ffffff"
+	},
+	{
+		"model": "gpt-5.1",
+		"name": "ChatGPT 5",
+		"face": "res://assets/images/openai.svg",
+		"body_colour": "#ffff00"
+	},
+	{
+		"model": "gpt-5.1",
+		"name": "DeepSeek",
+		"face": "res://assets/images/deepseek.svg",
+		"body_colour": "#ffffff"
+	},
+	{
+		"model": "gpt-5.1",
+		"name": "Gemini",
+		"face": "res://assets/images/gemini.png",
+		"body_colour": "#111429"
+	},
+	{
+		"model": "gpt-5.1",
+		"name": "Nemotron",
+		"face": "res://assets/images/nvidia.png",
+		"body_colour": "#000000"
+	},
+	{
+		"model": "gpt-5.1",
+		"name": "Kimi",
+		"face": "res://assets/images/kimi.png",
+		"body_colour": "#44a33d"
+	}
+]
