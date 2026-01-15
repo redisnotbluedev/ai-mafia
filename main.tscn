@@ -65,8 +65,8 @@ metadata/_custom_type_script = "uid://y52nsk4e6gk"
 
 [node name="OpenAI" type="Node" parent="."]
 script = ExtResource("1_ig7tw")
-api_key = "sk-mapleai-5nwEr5eE0BmhHN6vpjndBsw9juH5IhUyjlyRT7mdoLow0JlQDTjtbHTy5JdTKGcxTDn1HoSFW1PsMeR1"
-base_url = "https://api.mapleai.de/v1"
+api_key = "YOUR_API_KEY_HERE"
+base_url = ""
 metadata/_custom_type_script = "uid://6ec0v4wwijip"
 
 [node name="NightSun" type="DirectionalLight3D" parent="."]
